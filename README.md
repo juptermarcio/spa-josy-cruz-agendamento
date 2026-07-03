@@ -48,3 +48,4 @@ https://juptermarcio.github.io/spa-josy-cruz-agendamento/
 - Autenticação administrativa real.
 - Envio real de e-mail.
 - Histórico permanente.
+- Novo disparo de publicação do GitHub Pages.
