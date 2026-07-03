@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#9b5f4d" />
+  <title>Spa Josy Cruz — Agendamento</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p id="internalAccess" class="eyebrow internal-trigger" aria-label="Spa Josy Cruz">Spa Josy Cruz</p>
+      <h1>Agendamento</h1>
+      <p class="subtitle">Escolha serviço, data e horário. O agendamento é confirmado automaticamente.</p>
+    </div>
+    <button id="installBtn" class="ghost hidden" type="button">Instalar</button>
+  </header>
+
+  <main>
+    <section id="bookingView" class="view active" aria-labelledby="bookingTitle">
+      <div class="card hero">
+        <p class="eyebrow">Tech Office · Sala 711 · São Luís/MA</p>
+        <h2 id="bookingTitle">Agendamento online</h2>
+        <p>Escolha serviço, data e horário. Ao finalizar, o horário fica <strong>confirmado</strong> na agenda.</p>
+      </div>
+
+      <form id="bookingForm" class="grid" autocomplete="on">
+        <section class="card step">
+          <div class="step-head">
+            <span class="step-number">1</span>
+            <h3>Seu cadastro</h3>
+          </div>
+          <label>Nome completo
+            <input id="clientName" name="clientName" type="text" required placeholder="Ex.: Maria Silva" />
+          </label>
+          <label>WhatsApp
+            <input id="clientPhone" name="clientPhone" type="tel" required placeholder="Ex.: 98 99999-9999" />
+          </label>
+          <label>E-mail <span class="optional">opcional</span>
+            <input id="clientEmail" name="clientEmail" type="email" placeholder="nome@email.com" />
+          </label>
+        </section>
+
+        <section class="card step">
+          <div class="step-head">
+            <span class="step-number">2</span>
+            <h3>Serviço</h3>
+          </div>
+          <div id="servicesGrid" class="choice-grid"></div>
+          <input id="selectedService" type="hidden" required />
+        </section>
+
+        <section class="card step">
+          <div class="step-head">
+            <span class="step-number">3</span>
+            <h3>Data</h3>
+          </div>
+          <label>Escolha a data
+            <input id="appointmentDate" name="appointmentDate" type="date" required />
+          </label>
+          <p class="hint">Atendimento inicial configurado para terça a sábado, das 9h às 18h.</p>
+        </section>
+
+        <section class="card step">
+          <div class="step-head">
+            <span class="step-number">4</span>
+            <h3>Horário</h3>
+          </div>
+          <div id="timeGrid" class="time-grid" aria-live="polite"></div>
+          <input id="selectedTime" type="hidden" required />
+          <p class="hint">Horários já reservados ficam bloqueados nesta agenda.</p>
+        </section>
+
+        <section class="card step full">
+          <div class="step-head">
+            <span class="step-number">5</span>
+            <h3>Confirmar agendamento</h3>
+          </div>
+          <label>Observação <span class="optional">opcional</span>
+            <textarea id="clientNotes" rows="3" placeholder="Ex.: preferência de horário, dúvida ou recado"></textarea>
+          </label>
+          <label class="checkline">
+            <input id="acceptance" type="checkbox" required />
+            <span>Confirmo que desejo reservar este horário no Spa Josy Cruz e que, se precisar cancelar ou remarcar, entrarei em contato com a equipe.</span>
+          </label>
+          <button class="primary" type="submit">Confirmar agendamento</button>
+          <p id="bookingMessage" class="message" role="status"></p>
+        </section>
+      </form>
+    </section>
+
+    <section id="adminView" class="view" aria-labelledby="adminTitle">
+      <div class="card hero admin-hero">
+        <div>
+          <p class="eyebrow">Administração</p>
+          <h2 id="adminTitle">Painel simples</h2>
+          <p>Controle local de agendamentos confirmados, clientes, status e mensagens. Para produção, usar backend compartilhado.</p>
+        </div>
+        <button id="backToBookingBtn" class="ghost" type="button">Voltar ao agendamento</button>
+      </div>
+
+      <section id="loginCard" class="card">
+        <h3>Acesso administrativo</h3>
+        <p class="hint">Área restrita da administração. Acesso apenas para equipe autorizada.</p>
+        <label>PIN
+          <input id="adminPin" type="password" inputmode="numeric" placeholder="Digite o PIN" />
+        </label>
+        <button id="loginBtn" class="primary" type="button">Entrar</button>
+        <p id="loginMessage" class="message"></p>
+      </section>
+
+      <section id="adminPanel" class="hidden">
+        <div class="admin-actions card">
+          <div>
+            <h3>Agenda confirmada</h3>
+            <p class="hint">Os agendamentos entram automaticamente como confirmados. Use os filtros e altere o status conforme o atendimento evoluir.</p>
+          </div>
+          <div class="button-row">
+            <button id="exportJsonBtn" type="button" class="ghost">Exportar JSON</button>
+            <button id="exportCsvBtn" type="button" class="ghost">Exportar CSV</button>
+            <button id="resetDemoBtn" type="button" class="danger">Limpar dados</button>
+          </div>
+        </div>
+
+        <div class="card filters">
+          <label>Data
+            <input id="filterDate" type="date" />
+          </label>
+          <label>Status
+            <select id="filterStatus">
+              <option value="">Todos</option>
+              <option>Confirmado</option>
+              <option>Remarcado</option>
+              <option>Realizado</option>
+              <option>Cancelado</option>
+              <option>Não compareceu</option>
+            </select>
+          </label>
+          <label>Buscar
+            <input id="filterSearch" type="search" placeholder="Nome, telefone ou serviço" />
+          </label>
+        </div>
+
+        <div id="statsGrid" class="stats-grid"></div>
+        <div id="appointmentsList" class="appointments-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <template id="appointmentTemplate">
+    <article class="appointment card">
+      <div class="appointment-main">
+        <div>
+          <p class="eyebrow appt-status"></p>
+          <h3 class="appt-title"></h3>
+          <p class="appt-meta"></p>
+          <p class="appt-contact"></p>
+          <p class="appt-notes"></p>
+        </div>
+        <div class="status-pill"></div>
+      </div>
+      <div class="button-row wrap">
+<button data-action="Realizado" type="button">Realizado</button>
+        <button data-action="Remarcado" type="button">Remarcado</button>
+        <button data-action="Cancelado" type="button">Cancelar</button>
+        <button data-action="Não compareceu" type="button">Não compareceu</button>
+        <button data-action="copyWhatsapp" type="button" class="ghost">Copiar WhatsApp</button>
+        <button data-action="copyEmail" type="button" class="ghost">Copiar e-mail</button>
+      </div>
+    </article>
+  </template>
+
+  <footer>
+    <p>Spa Josy Cruz · PWA v1.2 · Protótipo operacional</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
